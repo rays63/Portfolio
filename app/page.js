@@ -1,18 +1,29 @@
 ﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  MdApi,
+  MdAutoFixHigh,
+  MdBugReport,
+  MdCode,
+  MdDataObject,
+  MdDataset,
+  MdDevices,
+  MdFactCheck,
+  MdGroups,
+  MdHub,
+  MdInsights,
+  MdChecklist,
+  MdMiscellaneousServices,
+  MdRocketLaunch,
+  MdTaskAlt,
+  MdScience,
+  MdSpeed
+} from "react-icons/md";
+import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 
 const GITHUB_USERNAME = "rays63";
 const PROJECT_LIMIT = 6;
-
-const skillItems = [
-  { name: "Selenium + Cypress", level: "90%", group: "automation" },
-  { name: "API Testing (Postman/REST Assured)", level: "85%", group: "automation" },
-  { name: "Test Case Design", level: "92%", group: "manual" },
-  { name: "Exploratory Testing", level: "88%", group: "manual" },
-  { name: "Jira + TestRail", level: "87%", group: "tools" },
-  { name: "CI/CD (GitHub Actions/Jenkins)", level: "80%", group: "tools" }
-];
 
 const extractReadmeSummary = (readmeText, fallback) => {
   if (!readmeText) return fallback;
@@ -50,10 +61,130 @@ const pillButton =
   "inline-flex min-h-10 items-center justify-center rounded-full border px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5";
 const primaryButton = `${pillButton} border-emerald-700 bg-emerald-700 text-white shadow-[0_10px_26px_rgba(11,110,79,0.3)] hover:bg-emerald-800`;
 const outlineButton = `${pillButton} border-emerald-700/45 bg-white/90 text-emerald-800 shadow-[0_8px_20px_rgba(16,21,37,0.08)] hover:border-emerald-700`;
+const cardSurface = "rounded-2xl border border-slate-300 bg-white shadow-[0_14px_35px_rgba(16,21,37,0.08)]";
+const heroSectionClass = "reveal scroll-mt-24 flex min-h-[calc(100svh-84px)] flex-col items-center justify-center py-10 text-center";
+
+const skillItems = [
+  { name: "Playwright", group: "automation", icon: "automation" },
+  { name: "Cypress", group: "automation", icon: "automation" },
+  { name: "Appium 2", group: "automation", icon: "mobile" },
+  { name: "WebdriverIO", group: "automation", icon: "automation" },
+  { name: "REST API Testing", group: "api", icon: "api" },
+  { name: "Postman", group: "api", icon: "api" },
+  { name: "JMeter", group: "api", icon: "performance" },
+  { name: "JavaScript", group: "scripting", icon: "code" },
+  { name: "TypeScript", group: "scripting", icon: "code" },
+  { name: "Python", group: "scripting", icon: "code" },
+  { name: "SQL", group: "data", icon: "database" },
+  { name: "PostgreSQL", group: "data", icon: "database" },
+  { name: "Oracle", group: "data", icon: "database" },
+  { name: "GitHub Actions", group: "tools", icon: "devops" },
+  { name: "Jenkins", group: "tools", icon: "devops" },
+  { name: "Jira", group: "tools", icon: "collaboration" },
+  { name: "TestRail", group: "tools", icon: "collaboration" },
+  { name: "Manual Testing", group: "manual", icon: "manual" },
+  { name: "Regression Testing", group: "manual", icon: "manual" },
+  { name: "Mobile Testing", group: "manual", icon: "mobile" }
+];
+
+const skillFilters = [
+  { key: "all", label: "All" },
+  { key: "automation", label: "Automation" },
+  { key: "api", label: "API/Perf" },
+  { key: "manual", label: "Manual QA" },
+  { key: "data", label: "Data" },
+  { key: "tools", label: "Tools" }
+];
+
+const experienceHighlights = [
+  { metric: "80%", label: "Faster bug debugging and detection through targeted automation" },
+  { metric: "Web + Mobile", label: "End-to-end quality ownership across both platforms" },
+  { metric: "Cross-Functional", label: "Strong collaboration with engineering and product teams" }
+];
+
+const experienceResponsibilities = [
+  "Designed and executed manual and automated test scenarios for functional, regression, and performance coverage.",
+  "Built reusable Cypress automation components to accelerate test execution and maintenance.",
+  "Implemented Appium (JavaScript) mobile E2E suites to improve release confidence.",
+  "Validated APIs with Postman and assessed load behavior with JMeter.",
+  "Queried PostgreSQL and Oracle databases to verify business rules and data integrity.",
+  "Documented test strategy, test data, and execution evidence for clear stakeholder visibility.",
+  "Coordinated defect triage and resolution with developers and product teams in Jira.",
+  "Mentored QA trainees and contributed to continuous process improvements across sprint cycles."
+];
+
+const competencyItems = [
+  { title: "Manual & Automation Test Planning", icon: "planning" },
+  { title: "Bug Tracking & Test Reporting", icon: "bugs" },
+  { title: "Quality Assurance Best Practices", icon: "quality" },
+  { title: "Agile/Scrum Collaboration", icon: "agile" },
+  { title: "Process Optimization", icon: "optimization" },
+  { title: "Data Validation & Test Data Preparation", icon: "data" }
+];
+
+const educationItems = [
+  {
+    school: "IIMS College",
+    period: "2020 - 2024",
+    program: "Bachelor's Degree in Computer Science (Hons)",
+    location: "Kathmandu, Nepal"
+  },
+  {
+    school: "Arniko Int'l SS & College",
+    period: "2018 - 2020",
+    program: "Higher Secondary Level",
+    location: "Lalitpur, Nepal"
+  }
+];
+
+function SkillIcon({ type }) {
+  const iconClass = "text-2xl text-emerald-700";
+  if (type === "api") {
+    return <MdApi className={iconClass} aria-hidden="true" />;
+  }
+  if (type === "database") {
+    return <MdDataObject className={iconClass} aria-hidden="true" />;
+  }
+  if (type === "devops") {
+    return <MdHub className={iconClass} aria-hidden="true" />;
+  }
+  if (type === "manual") {
+    return <MdScience className={iconClass} aria-hidden="true" />;
+  }
+  if (type === "mobile") {
+    return <MdDevices className={iconClass} aria-hidden="true" />;
+  }
+  if (type === "collaboration") {
+    return <MdGroups className={iconClass} aria-hidden="true" />;
+  }
+  if (type === "performance") {
+    return <MdSpeed className={iconClass} aria-hidden="true" />;
+  }
+  if (type === "automation") {
+    return <MdAutoFixHigh className={iconClass} aria-hidden="true" />;
+  }
+  if (type === "code") {
+    return <MdCode className={iconClass} aria-hidden="true" />;
+  }
+  return <MdMiscellaneousServices className={iconClass} aria-hidden="true" />;
+}
+
+function CompetencyIcon({ type }) {
+  const iconClass = "text-3xl text-emerald-700";
+  if (type === "planning") return <MdChecklist className={iconClass} aria-hidden="true" />;
+  if (type === "bugs") return <MdBugReport className={iconClass} aria-hidden="true" />;
+  if (type === "quality") return <MdFactCheck className={iconClass} aria-hidden="true" />;
+  if (type === "agile") return <MdGroups className={iconClass} aria-hidden="true" />;
+  if (type === "optimization") return <MdRocketLaunch className={iconClass} aria-hidden="true" />;
+  if (type === "data") return <MdDataset className={iconClass} aria-hidden="true" />;
+  return <MdTaskAlt className={iconClass} aria-hidden="true" />;
+}
 
 export default function Page() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [navSolid, setNavSolid] = useState(false);
+  const [showNav, setShowNav] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("automation");
   const [projects, setProjects] = useState([]);
   const [projectsStatus, setProjectsStatus] = useState("Loading projects...");
   const cursorLensRef = useRef(null);
@@ -94,11 +225,16 @@ export default function Page() {
     const onScroll = () => {
       revealOnScroll();
       setActiveNav();
+
+      const scrollY = window.scrollY;
+      setShowNav(scrollY > 20);
+      setNavSolid(scrollY > 20);
     };
 
     window.addEventListener("scroll", onScroll);
     revealOnScroll();
     setActiveNav();
+    onScroll();
 
     return () => {
       window.removeEventListener("scroll", onScroll);
@@ -339,8 +475,20 @@ export default function Page() {
     const onMouseMove = (event) => {
       const target = event.target;
       const overInteractive = target instanceof Element && Boolean(target.closest(interactiveSelector));
-      setNativeCursorZone(overInteractive);
-      if (!overInteractive) {
+      const isBackgroundArea =
+        target === document.body ||
+        target === document.documentElement ||
+        (target instanceof Element &&
+          Boolean(target.closest("main")) === false &&
+          Boolean(target.closest("header")) === false &&
+          Boolean(target.closest("footer")) === false);
+
+      // Keep native cursor on interactive elements; use custom modes elsewhere.
+      const useNativeCursor = overInteractive;
+      setNativeCursorZone(useNativeCursor);
+      if (!useNativeCursor) {
+        lens.classList.toggle("mode-bg", isBackgroundArea);
+        lens.classList.toggle("mode-v", !isBackgroundArea);
         lens.classList.add("is-visible");
         lens.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0)`;
       }
@@ -348,6 +496,8 @@ export default function Page() {
 
     const onMouseLeaveWindow = () => {
       lens.classList.remove("is-visible");
+      lens.classList.remove("mode-bg");
+      lens.classList.remove("mode-v");
       setNativeCursorZone(false);
     };
 
@@ -369,9 +519,17 @@ export default function Page() {
       <div className="bg-shape bg-shape-1" />
       <div className="bg-shape bg-shape-2" />
 
-      <header className="sticky top-0 z-50 flex items-center justify-between border-b border-slate-300 bg-slate-100/85 px-[6vw] py-4 backdrop-blur-md">
+      <header
+        className={`sticky top-0 z-50 flex items-center justify-between px-[6vw] py-4 transition-all duration-300 ${
+          showNav ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-2 opacity-0"
+        } ${
+          navSolid
+            ? "border-b border-slate-300 bg-slate-100/95 shadow-[0_10px_30px_rgba(16,21,37,0.12)] backdrop-blur-md"
+            : "border-b border-transparent bg-transparent"
+        }`}
+      >
         <a href="#home" className="text-xl font-bold text-slate-900">
-          QA<span className="text-emerald-700">Portfolio</span>
+          Raymond <span className="text-emerald-700">Maharjan</span>
         </a>
 
         <button
@@ -388,10 +546,11 @@ export default function Page() {
           }`}
         >
           {[
-            ["about", "About"],
+            ["about", "About Me"],
             ["skills", "Skills"],
             ["projects", "Projects"],
             ["experience", "Experience"],
+            ["education", "Education"],
             ["download", "Download CV"],
             ["contact", "Contact"]
           ].map(([id, label]) => (
@@ -402,16 +561,38 @@ export default function Page() {
         </nav>
       </header>
 
-      <main id="home" className="mx-auto w-[min(1000px,92vw)] pb-16 pt-8">
-        <section className="reveal py-12">
-          <p className="mb-2 font-mono text-sm text-emerald-700">QA Engineer Portfolio</p>
-          <h1 className="max-w-[15ch] text-4xl font-bold leading-tight md:text-5xl">Building quality into every release.</h1>
-          <p className="mt-4 max-w-2xl text-slate-600">
-            I design test strategies, automate regression suites, and keep software stable across fast delivery cycles.
+      <main id="home" className="mx-auto w-[min(1100px,94vw)] pb-16 pt-8">
+        <section className={heroSectionClass}>
+          <p className="mb-2 text-sm font-bold text-emerald-700">Software Quality Assurance Engineer</p>
+          <h1 className="mx-auto text-4xl font-bold leading-tight md:text-6xl">Raymond Maharjan</h1>
+          
+          <p className="mx-auto mt-4 max-w-2xl text-slate-600">
+            I provide both automation and manual testing for web and mobile applications to ensure stable, high-quality
+            releases.
           </p>
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
             <a href="#contact" className={primaryButton}>
               Hire Me
+            </a>
+            <a
+              href="https://github.com/rays63"
+              className={outlineButton}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+              title="GitHub"
+            >
+              <FaGithub className="text-lg" aria-hidden="true" />
+            </a>
+            <a
+              href="https://www.linkedin.com"
+              className={outlineButton}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              title="LinkedIn"
+            >
+              <FaLinkedinIn className="text-lg" aria-hidden="true" />
             </a>
             <a href="/cv.pdf" className={outlineButton} download>
               Download CV
@@ -420,25 +601,97 @@ export default function Page() {
         </section>
 
         <section id="about" className="reveal py-11">
-          <h2 className="mb-4 text-3xl font-semibold">About</h2>
-          <div className="rounded-2xl border border-slate-300 bg-white p-5 shadow-[0_14px_35px_rgba(16,21,37,0.08)]">
-            <p>
-              I am a QA Engineer focused on test planning, automation, API validation, and end-to-end product quality. I
-              work closely with developers and product teams to catch issues early and deliver reliable user experiences.
-            </p>
+          <h2 className="mb-4 text-3xl font-semibold">About Me</h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-5 md:grid-rows-6">
+            <div className={`${cardSurface} bg-gradient-to-br from-white to-emerald-50/45 p-6 md:col-span-3 md:row-span-3`}>
+              <p>
+                I am a Software Quality Assurance Engineer who ensures products are reliable, scalable, and release-ready.
+                I work across manual and automated testing for web and mobile platforms, design practical test coverage,
+                validate APIs and data flows, and collaborate closely with cross-functional teams to resolve issues early
+                and deliver confident releases.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 md:col-span-3 md:row-span-3 md:grid-cols-3">
+              {experienceHighlights.map((highlight) => (
+                <article
+                  key={highlight.metric}
+                  className="rounded-xl border border-emerald-200 bg-white/90 px-4 py-3 shadow-[0_14px_35px_rgba(16,21,37,0.08)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_45px_rgba(16,21,37,0.15)]"
+                >
+                  <p className="text-lg font-bold text-emerald-700">{highlight.metric}</p>
+                  <p className="text-sm text-slate-600">{highlight.label}</p>
+                </article>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-center p-4 md:col-span-2 md:row-span-6 md:col-start-4 md:row-start-1">
+              <img
+                src="https://github.com/rays63.png"
+                alt="Raymond Maharjan profile"
+                className="h-44 w-44 rounded-2xl border border-emerald-200 object-cover shadow-sm md:h-[92%] md:w-full md:max-w-[260px]"
+              />
+            </div>
           </div>
         </section>
 
         <section id="skills" className="reveal py-11">
+          <h2 className="mb-4 text-3xl font-semibold">Skills</h2>
+          <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {competencyItems.map((item) => (
+              <article
+                key={item.title}
+                className={`${cardSurface} group bg-gradient-to-br from-white to-slate-50 px-4 py-4 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_45px_rgba(16,21,37,0.15)]`}
+              >
+                <div className="flex items-start gap-3">
+                  <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-2.5 transition-colors duration-300 group-hover:bg-emerald-100">
+                    <CompetencyIcon type={item.icon} />
+                  </div>
+                  <h3 className="pt-1 font-semibold">{item.title}</h3>
+                </div>
+                <div className="mt-3 h-1.5 w-full rounded-full bg-slate-200">
+                  <div className="h-full w-2/3 rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-300 group-hover:w-5/6" />
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {[
+              {
+                label: "Planning",
+                desc: "Test strategy, scope definition, and risk-based coverage planning.",
+                icon: <MdInsights className="text-xl text-emerald-700" aria-hidden="true" />
+              },
+              {
+                label: "Execution",
+                desc: "Reliable manual and automation execution across web, mobile, and API.",
+                icon: <MdFactCheck className="text-xl text-emerald-700" aria-hidden="true" />
+              },
+              {
+                label: "Delivery",
+                desc: "Defect visibility, reporting, and quality sign-off for stable releases.",
+                icon: <MdRocketLaunch className="text-xl text-emerald-700" aria-hidden="true" />
+              }
+            ].map((pillar) => (
+              <article
+                key={pillar.label}
+                className={`${cardSurface} group flex items-start gap-3 px-4 py-4 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_45px_rgba(16,21,37,0.15)]`}
+              >
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-2.5 transition-colors duration-300 group-hover:bg-emerald-100">
+                  {pillar.icon}
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-900">{pillar.label}</p>
+                  <p className="mt-1 text-sm text-slate-600">{pillar.desc}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-3xl font-semibold">Skills</h2>
+            <h3 className="text-2xl font-semibold">Technical Skills</h3>
             <div className="flex flex-wrap gap-2" role="tablist" aria-label="Skill filters">
-              {[
-                { label: "All", key: "all" },
-                { label: "Automation", key: "automation" },
-                { label: "Manual QA", key: "manual" },
-                { label: "Tools", key: "tools" }
-              ].map((filter) => (
+              {skillFilters.map((filter) => (
                 <button
                   key={filter.key}
                   className={`${pillButton} ${
@@ -457,15 +710,19 @@ export default function Page() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filteredSkills.map((skill) => (
               <article
-                className="rounded-xl border border-slate-300 bg-white p-4 shadow-[0_14px_35px_rgba(16,21,37,0.08)]"
                 key={skill.name}
+                className={`${cardSurface} group p-4 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_45px_rgba(16,21,37,0.15)]`}
               >
-                <h3 className="font-semibold">{skill.name}</h3>
-                <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-slate-200">
-                  <span
-                    className="block h-full rounded-full bg-gradient-to-r from-emerald-700 to-amber-500"
-                    style={{ width: skill.level }}
-                  />
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-2.5 transition-colors duration-300 group-hover:bg-emerald-100">
+                      <SkillIcon type={skill.icon} />
+                    </div>
+                    <h3 className="font-semibold">{skill.name}</h3>
+                  </div>
+                  <span className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-emerald-800">
+                    {skill.group}
+                  </span>
                 </div>
               </article>
             ))}
@@ -483,13 +740,13 @@ export default function Page() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {projects.map((project) => (
               <article
-                className="grid gap-3 rounded-xl border border-slate-300 bg-white p-4 shadow-[0_14px_35px_rgba(16,21,37,0.08)]"
+                className="grid gap-3 rounded-xl border border-slate-300 bg-white p-4 shadow-[0_14px_35px_rgba(16,21,37,0.08)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_45px_rgba(16,21,37,0.15)]"
                 key={project.url}
               >
                 <h3 className="font-semibold">{project.name}</h3>
                 <p className="text-slate-600">{project.summary}</p>
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="font-mono text-xs text-slate-600">{project.language}</span>
+                  <span className="text-xs text-slate-600">{project.language}</span>
                   <a
                     className="font-semibold text-emerald-700 hover:text-emerald-800 hover:underline"
                     href={project.url}
@@ -505,32 +762,44 @@ export default function Page() {
         </section>
 
         <section id="experience" className="reveal py-11">
-          <h2 className="mb-4 text-3xl font-semibold">Experience</h2>
-          <div className="grid gap-4">
-            {[
-              {
-                time: "2023 - Present",
-                title: "Senior QA Engineer",
-                desc: "Led automation strategy, reduced regression time by 45%, and improved defect leakage metrics through risk-based testing."
-              },
-              {
-                time: "2021 - 2023",
-                title: "QA Engineer",
-                desc: "Built API and UI test suites, integrated tests into CI, and collaborated in Agile ceremonies to keep release quality high."
-              },
-              {
-                time: "2019 - 2021",
-                title: "Junior Test Analyst",
-                desc: "Created manual test cases, executed test cycles, and logged clear bug reports that accelerated issue triage."
-              }
-            ].map((item) => (
-              <article
-                key={item.time}
-                className="rounded-r-xl border-l-4 border-emerald-700 bg-white px-4 py-3 shadow-[0_14px_35px_rgba(16,21,37,0.08)]"
-              >
-                <span className="font-mono text-sm text-slate-600">{item.time}</span>
-                <h3 className="my-1 font-semibold">{item.title}</h3>
-                <p>{item.desc}</p>
+          <h2 className="mb-4 text-3xl font-semibold">Work Experience</h2>
+          <article className={`${cardSurface} overflow-hidden`}>
+            <div className="border-b border-emerald-100 bg-gradient-to-r from-emerald-50 to-white px-6 py-5">
+              <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">Bajra Technologies · Kathmandu, Nepal</p>
+              <h3 className="mt-2 text-xl font-semibold">Software Quality Assurance Engineer L1</h3>
+              <p className="text-sm text-slate-600">June 2024 - Present</p>
+            </div>
+            <div className="p-6">
+              <div className="mb-5 grid grid-cols-1 gap-3 md:grid-cols-3">
+                {experienceHighlights.map((highlight) => (
+                  <article key={`exp-${highlight.metric}`} className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                    <p className="font-semibold text-emerald-700">{highlight.metric}</p>
+                    <p className="text-sm text-slate-600">{highlight.label}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                {experienceResponsibilities.map((item) => (
+                  <p key={item} className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
+                    {item}
+                  </p>
+                ))}
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section id="education" className="reveal py-11">
+          <h2 className="mb-4 text-3xl font-semibold">Education</h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {educationItems.map((item) => (
+              <article key={item.school} className={`${cardSurface} border-l-4 border-l-emerald-700 px-5 py-4`}>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h3 className="font-semibold">{item.school}</h3>
+                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">{item.period}</span>
+                </div>
+                <p className="mt-2 text-slate-800">{item.program}</p>
+                <p className="text-sm text-slate-600">{item.location}</p>
               </article>
             ))}
           </div>
@@ -547,18 +816,18 @@ export default function Page() {
         </section>
 
         <section id="contact" className="reveal py-11">
-          <h2 className="mb-4 text-3xl font-semibold">Contact Me</h2>
+          <h2 className="mb-4 text-3xl font-semibold">Get in Touch</h2>
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-300 bg-white p-5 shadow-[0_14px_35px_rgba(16,21,37,0.08)]">
             <p>If you&apos;d like to discuss QA roles or collaboration, send me an email.</p>
-            <a className={outlineButton} href="mailto:yourgmail@gmail.com?subject=QA%20Engineer%20Opportunity">
-              Open Mail App
+            <a className={outlineButton} href="mailto:raymondmhz63@gmail.com?subject=QA%20Engineer%20Opportunity">
+              contact me
             </a>
           </div>
         </section>
       </main>
 
       <footer className="border-t border-slate-300 py-5 text-center text-slate-600">
-        <p>&copy; {new Date().getFullYear()} QA Engineer Portfolio</p>
+        <p>&copy; {new Date().getFullYear()} Raymond Maharjan</p>
       </footer>
     </>
   );
