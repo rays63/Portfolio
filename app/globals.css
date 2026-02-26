@@ -1,0 +1,132 @@
+﻿@import "tailwindcss";
+
+:root {
+  --accent: #0b6e4f;
+  --accent-2: #f2a900;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply min-h-screen bg-slate-100 text-slate-900;
+  background-image: radial-gradient(circle at 10% 15%, #e3f1ff 0%, transparent 35%),
+    radial-gradient(circle at 85% 12%, #fff3cf 0%, transparent 35%);
+  cursor: default;
+}
+
+#particles-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -3;
+  pointer-events: none;
+}
+
+.bg-shape {
+  position: fixed;
+  border-radius: 999px;
+  z-index: -1;
+  opacity: 0.3;
+  filter: blur(4px);
+}
+
+.bg-shape-1 {
+  width: 280px;
+  height: 280px;
+  background: #7fd1b9;
+  top: -100px;
+  left: -80px;
+}
+
+.bg-shape-2 {
+  width: 230px;
+  height: 230px;
+  background: #ffd980;
+  bottom: 40px;
+  right: -70px;
+}
+
+.nav-link {
+  @apply text-[0.95rem] text-slate-600 transition-colors;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  @apply text-emerald-700;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.qa-cursor-lens {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s linear, border-color 0.15s ease, box-shadow 0.15s ease;
+  will-change: transform, opacity;
+  z-index: 140;
+}
+
+.qa-cursor-lens {
+  width: 28px;
+  height: 28px;
+  margin-left: -14px;
+  margin-top: -14px;
+  border-radius: 999px;
+  border: 2px solid rgba(11, 110, 79, 0.88);
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.85), rgba(210, 246, 234, 0.35) 62%, transparent 70%);
+  box-shadow: 0 0 0 4px rgba(11, 110, 79, 0.1);
+}
+
+.qa-cursor-lens::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 3px;
+  right: -8px;
+  bottom: -5px;
+  border-radius: 999px;
+  background: rgba(11, 110, 79, 0.9);
+  transform: rotate(40deg);
+  transform-origin: left center;
+}
+
+.qa-cursor-lens.is-visible {
+  opacity: 1;
+}
+
+.qa-cursor-lens.is-hover {
+  border-color: rgba(242, 169, 0, 0.96);
+  box-shadow: 0 0 0 5px rgba(242, 169, 0, 0.22);
+}
+
+.custom-cursor-enabled,
+.custom-cursor-enabled a,
+.custom-cursor-enabled button,
+.custom-cursor-enabled [role="button"] {
+  cursor: none !important;
+}
+
+.custom-cursor-enabled.cursor-native-zone,
+.custom-cursor-enabled.cursor-native-zone * {
+  cursor: default !important;
+}
+
+@media (pointer: coarse) {
+  .qa-cursor-lens {
+    display: none;
+  }
+}
