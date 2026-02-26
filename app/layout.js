@@ -1,15 +1,15 @@
 ﻿import "./globals.css";
-import { Space_Grotesk, IBM_Plex_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Cormorant_Garamond } from "next/font/google";
 
-const spaceGrotesk = Space_Grotesk({
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-space-grotesk"
+  variable: "--font-plus-jakarta"
 });
 
-const ibmPlexMono = IBM_Plex_Mono({
+const cormorantGaramond = Cormorant_Garamond({
   subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-ibm-plex-mono"
+  weight: ["600", "700"],
+  variable: "--font-cormorant"
 });
 
 export const metadata = {
@@ -20,7 +20,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${spaceGrotesk.variable} ${ibmPlexMono.variable}`}>{children}</body>
+      <body className={`${plusJakartaSans.variable} ${cormorantGaramond.variable}`}>{children}</body>
     </html>
   );
 }
