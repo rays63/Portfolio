@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "next build && wrangler deploy",
+    "preview": "next build && wrangler dev"
   },
   "dependencies": {
     "next": "^16.1.6",
@@ -17,6 +19,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.1",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.2.1"
+    "tailwindcss": "^4.2.1",
+    "wrangler": "^4.125.0"
   }
 }
