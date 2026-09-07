@@ -1,4 +1,5 @@
 ﻿import "./globals.css";
+import { SITE_URL } from "./site-config";
 import { Plus_Jakarta_Sans, Cormorant_Garamond } from "next/font/google";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -13,8 +14,23 @@ const cormorantGaramond = Cormorant_Garamond({
 });
 
 export const metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "QA Engineer Portfolio",
-  description: "Interactive portfolio website for a QA Engineer"
+  description: "Interactive portfolio website for a QA Engineer",
+  alternates: {
+    canonical: "/"
+  },
+  openGraph: {
+    title: "QA Engineer Portfolio",
+    description: "Interactive portfolio website for a QA Engineer",
+    url: "/",
+    siteName: "QA Engineer Portfolio",
+    type: "website"
+  },
+  robots: {
+    index: true,
+    follow: true
+  }
 };
 
 export default function RootLayout({ children }) {
