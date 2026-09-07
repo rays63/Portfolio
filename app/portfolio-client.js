@@ -490,7 +490,7 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
               <FaGithub className="text-lg" aria-hidden="true" />
             </a>
             <a
-              href="https://www.linkedin.com"
+              href="https://www.linkedin.com/in/raymz/"
               className={outlineButton}
               target="_blank"
               rel="noopener noreferrer"
