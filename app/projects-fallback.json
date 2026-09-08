@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Portfolio",
+    "summary": "This repo is my QA portfolio website ",
+    "url": "https://github.com/rays63/Portfolio",
+    "language": "JavaScript"
+  },
+  {
+    "name": "Appium-Setup-Manager",
+    "summary": "This is a desktop application to help and reduce the time taken to setup appium and the required drivers",
+    "url": "https://github.com/rays63/Appium-Setup-Manager",
+    "language": "C#"
+  },
+  {
+    "name": "MeroKhata",
+    "summary": "HissabKitab is a cross-platform personal finance and cashbook app for managing multiple books, tracking income and expenses, importing statements, setting goals, and generating reports with a clean and modern experience.",
+    "url": "https://github.com/rays63/MeroKhata",
+    "language": "Dart"
+  },
+  {
+    "name": "KothaBhada",
+    "summary": "This is a app to manage and calculate rental property.",
+    "url": "https://github.com/rays63/KothaBhada",
+    "language": "Mixed stack"
+  },
+  {
+    "name": "Cashbook",
+    "summary": "This is a vibe coded app replica of cashbook",
+    "url": "https://github.com/rays63/Cashbook",
+    "language": "Swift"
+  },
+  {
+    "name": "Playright-typescript",
+    "summary": "This repo contains Automation script using ",
+    "url": "https://github.com/rays63/Playright-typescript",
+    "language": "TypeScript"
+  }
+]

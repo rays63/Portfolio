@@ -43,7 +43,7 @@ const personSchema = {
   name: "Raymond Maharjan",
   jobTitle: "Software Quality Assurance Engineer",
   url: SITE_URL,
-  image: "https://github.com/rays63.png",
+  image: `${SITE_URL}/profile.jpg`,
   email: "mailto:raymondmhz63@gmail.com",
   address: {
     "@type": "PostalAddress",

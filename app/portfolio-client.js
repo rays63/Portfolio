@@ -440,12 +440,15 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
         <button
           className="rounded border border-slate-300 bg-white px-2 py-1 text-xl text-slate-700 md:hidden"
           aria-label="Toggle navigation"
+          aria-expanded={menuOpen}
+          aria-controls="primary-navigation"
           onClick={() => setMenuOpen((v) => !v)}
         >
           &#9776;
         </button>
 
         <nav
+          id="primary-navigation"
           className={`absolute right-[6vw] top-full w-[min(260px,80vw)] flex-col gap-3 rounded-xl border border-slate-300 bg-white p-4 shadow-lg md:static md:flex md:w-auto md:flex-row md:border-0 md:bg-transparent md:p-0 md:shadow-none ${
             menuOpen ? "flex" : "hidden"
           }`}
@@ -531,8 +534,11 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
 
             <div className="flex items-center justify-center p-4 md:col-span-2 md:row-span-6 md:col-start-4 md:row-start-1">
               <img
-                src="https://github.com/rays63.png"
+                src="/profile.jpg"
                 alt="Raymond Maharjan profile"
+                width={460}
+                height={460}
+                fetchPriority="high"
                 className="h-44 w-44 rounded-2xl border border-emerald-200 object-cover shadow-sm md:h-[92%] md:w-full md:max-w-[260px]"
               />
             </div>
@@ -599,6 +605,10 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
               {skillFilters.map((filter) => (
                 <button
                   key={filter.key}
+                  role="tab"
+                  id={`skill-filter-${filter.key}`}
+                  aria-selected={activeFilter === filter.key}
+                  aria-controls="skill-list"
                   className={`${pillButton} ${
                     activeFilter === filter.key
                       ? "border-transparent bg-emerald-700 text-white shadow-[0_10px_22px_rgba(11,110,79,0.28)]"
@@ -612,7 +622,12 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            id="skill-list"
+            role="tabpanel"
+            aria-labelledby={`skill-filter-${activeFilter}`}
+            className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          >
             {filteredSkills.map((skill) => (
               <article
                 key={skill.name}
