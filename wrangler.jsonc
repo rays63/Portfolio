@@ -1,10 +1,51 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "portfolio",
+  "main": "src/index.js",
   "compatibility_date": "2026-08-20",
+  "routes": [
+    { "pattern": "www.maharjanraymond.com.np", "custom_domain": true }
+  ],
   "assets": {
     "directory": "./out",
+    "binding": "ASSETS",
     "not_found_handling": "404-page"
+  },
+  // Email Routing refuses anything not on this list, so a bug in the Worker
+  // still cannot mail a stranger.
+  "send_email": [
+    {
+      "name": "EMAIL",
+      "allowed_destination_addresses": ["raymondmhz63@gmail.com"]
+    }
+  ],
+  "ratelimits": [
+    // Counts every request to /api/contact, valid or not.
+    {
+      "name": "CONTACT_LIMITER",
+      "namespace_id": "1001",
+      "simple": { "limit": 12, "period": 60 }
+    },
+    // Counts only messages that pass validation and are about to be sent, so
+    // form typos never use up a real visitor's quota.
+    {
+      "name": "SEND_LIMITER",
+      "namespace_id": "1002",
+      "simple": { "limit": 3, "period": 60 }
+    }
+  ],
+  "vars": {
+    // Which repo and branch the admin writes to. Committing here triggers the
+    // deploy workflow, so this must be the branch that CI deploys from.
+    "GITHUB_REPO": "rays63/Portfolio",
+    "CONTENT_BRANCH": "main",
+    // Set these after creating the Access application, or the admin API stays
+    // locked (it fails closed by design):
+    //   npx wrangler secret put ACCESS_TEAM_DOMAIN   (e.g. yourteam.cloudflareaccess.com)
+    //   npx wrangler secret put ACCESS_AUD           (Application Audience tag)
+    //   npx wrangler secret put ADMIN_EMAILS         (optional allow-list)
+    //   npx wrangler secret put GITHUB_TOKEN         (fine-grained, Contents: write)
+    "ADMIN_EMAILS": ""
   },
   "observability": {
     "enabled": true
