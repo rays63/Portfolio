@@ -1,0 +1,110 @@
+{
+  "profile": {
+    "name": "Raymond Maharjan",
+    "role": "Software Quality Assurance Engineer",
+    "tagline": "I provide both automation and manual testing for web and mobile applications to ensure stable, high-quality releases.",
+    "about": "I am a Software Quality Assurance Engineer who ensures products are reliable, scalable, and release-ready. I work across manual and automated testing for web and mobile platforms, design practical test coverage, validate APIs and data flows, and collaborate closely with cross-functional teams to resolve issues early and deliver confident releases.",
+    "location": "Kathmandu, Nepal",
+    "availability": "open to remote roles",
+    "email": "raymondmhz63@gmail.com",
+    "github": "https://github.com/rays63",
+    "linkedin": "https://www.linkedin.com/in/raymz/"
+  },
+  "highlights": [
+    { "metric": "80%", "label": "Faster bug debugging and detection through targeted automation" },
+    { "metric": "Web + Mobile", "label": "End-to-end quality ownership across both platforms" },
+    { "metric": "Cross-Functional", "label": "Strong collaboration with engineering and product teams" }
+  ],
+  "competencies": [
+    { "title": "Manual & Automation Test Planning", "icon": "planning" },
+    { "title": "Bug Tracking & Test Reporting", "icon": "bugs" },
+    { "title": "Quality Assurance Best Practices", "icon": "quality" },
+    { "title": "Agile/Scrum Collaboration", "icon": "agile" },
+    { "title": "Process Optimization", "icon": "optimization" },
+    { "title": "Data Validation & Test Data Preparation", "icon": "data" }
+  ],
+  "pillars": [
+    {
+      "label": "Planning",
+      "desc": "Test strategy, scope definition, and risk-based coverage planning.",
+      "icon": "insights"
+    },
+    {
+      "label": "Execution",
+      "desc": "Reliable manual and automation execution across web, mobile, and API.",
+      "icon": "quality"
+    },
+    {
+      "label": "Delivery",
+      "desc": "Defect visibility, reporting, and quality sign-off for stable releases.",
+      "icon": "optimization"
+    }
+  ],
+  "skillFilters": [
+    { "key": "all", "label": "All" },
+    { "key": "automation", "label": "Automation" },
+    { "key": "api", "label": "API/Perf" },
+    { "key": "manual", "label": "Manual QA" },
+    { "key": "data", "label": "Data" },
+    { "key": "tools", "label": "Tools" }
+  ],
+  "skills": [
+    { "name": "Playwright", "group": "automation", "icon": "automation" },
+    { "name": "Cypress", "group": "automation", "icon": "automation" },
+    { "name": "Appium 2", "group": "automation", "icon": "mobile" },
+    { "name": "WebdriverIO", "group": "automation", "icon": "automation" },
+    { "name": "REST API Testing", "group": "api", "icon": "api" },
+    { "name": "Postman", "group": "api", "icon": "api" },
+    { "name": "JMeter", "group": "api", "icon": "performance" },
+    { "name": "JavaScript", "group": "scripting", "icon": "code" },
+    { "name": "TypeScript", "group": "scripting", "icon": "code" },
+    { "name": "Python", "group": "scripting", "icon": "code" },
+    { "name": "SQL", "group": "data", "icon": "database" },
+    { "name": "PostgreSQL", "group": "data", "icon": "database" },
+    { "name": "Oracle", "group": "data", "icon": "database" },
+    { "name": "GitHub Actions", "group": "tools", "icon": "devops" },
+    { "name": "Jenkins", "group": "tools", "icon": "devops" },
+    { "name": "Jira", "group": "tools", "icon": "collaboration" },
+    { "name": "TestRail", "group": "tools", "icon": "collaboration" },
+    { "name": "Manual Testing", "group": "manual", "icon": "manual" },
+    { "name": "Regression Testing", "group": "manual", "icon": "manual" },
+    { "name": "Mobile Testing", "group": "manual", "icon": "mobile" }
+  ],
+  "experience": [
+    {
+      "company": "Bajra Technologies",
+      "location": "Kathmandu, Nepal",
+      "role": "Software Quality Assurance Engineer L1",
+      "period": "June 2024 - Present",
+      "responsibilities": [
+        "Designed and executed manual and automated test scenarios for functional, regression, and performance coverage.",
+        "Built reusable Cypress automation components to accelerate test execution and maintenance.",
+        "Implemented Appium (JavaScript) mobile E2E suites to improve release confidence.",
+        "Validated APIs with Postman and assessed load behavior with JMeter.",
+        "Queried PostgreSQL and Oracle databases to verify business rules and data integrity.",
+        "Documented test strategy, test data, and execution evidence for clear stakeholder visibility.",
+        "Coordinated defect triage and resolution with developers and product teams in Jira.",
+        "Mentored QA trainees and contributed to continuous process improvements across sprint cycles."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "school": "IIMS College",
+      "period": "2020 - 2024",
+      "program": "Bachelor's Degree in Computer Science (Hons)",
+      "location": "Kathmandu, Nepal"
+    },
+    {
+      "school": "Arniko Int'l SS & College",
+      "period": "2018 - 2020",
+      "program": "Higher Secondary Level",
+      "location": "Lalitpur, Nepal"
+    }
+  ],
+  "sections": {
+    "projectsSubtitle": "Pulled from GitHub repositories",
+    "contactIntro": "If you'd like to discuss QA roles or collaboration, send me a message and I'll get back to you.",
+    "cvIntro": "Get my complete CV in PDF format with detailed project and testing experience."
+  }
+}
