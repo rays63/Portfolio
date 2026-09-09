@@ -34,6 +34,8 @@ export default function AdminPage() {
   const [sha, setSha] = useState(null);
   const [branch, setBranch] = useState("");
   const [status, setStatus] = useState({ kind: "loading", text: "Loading content..." });
+  const [cv, setCv] = useState(null);
+  const [cvStatus, setCvStatus] = useState({ kind: "idle", text: "" });
 
   const load = useCallback(async () => {
     setStatus({ kind: "loading", text: "Loading content..." });
@@ -56,6 +58,49 @@ export default function AdminPage() {
   useEffect(() => {
     load();
   }, [load]);
+
+  const loadCv = useCallback(async () => {
+    try {
+      const response = await fetch("/api/cv");
+      const result = await response.json().catch(() => ({}));
+      if (response.ok && result.ok) setCv(result);
+    } catch {
+      // Non-fatal: the editor still works without the CV panel.
+    }
+  }, []);
+
+  useEffect(() => {
+    loadCv();
+  }, [loadCv]);
+
+  const uploadCv = async (file) => {
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      setCvStatus({ kind: "error", text: `That file is ${(file.size / 1024 / 1024).toFixed(1)}MB. Maximum is 2MB.` });
+      return;
+    }
+
+    setCvStatus({ kind: "busy", text: "Uploading..." });
+    try {
+      const response = await fetch("/api/cv", {
+        method: "PUT",
+        headers: { "content-type": "application/pdf" },
+        body: file
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.ok) {
+        setCvStatus({ kind: "error", text: result.error ?? `Upload failed (${response.status}).` });
+        return;
+      }
+      setCvStatus({
+        kind: "done",
+        text: `${result.message}${result.commit ? ` (commit ${result.commit})` : ""}`
+      });
+      loadCv();
+    } catch {
+      setCvStatus({ kind: "error", text: "Network error while uploading." });
+    }
+  };
 
   const save = async () => {
     setStatus({ kind: "saving", text: "Saving..." });
@@ -468,6 +513,39 @@ export default function AdminPage() {
           >
             Add education
           </button>
+        </section>
+
+        {/* ---------------- CV ---------------- */}
+        <section className={card}>
+          <h2 className="mb-1 text-lg font-semibold">CV</h2>
+          <p className="mb-4 text-xs text-slate-500">
+            Replaces <code className="rounded bg-slate-100 px-1">public/cv.pdf</code>. PDF only, 2MB max.
+            {cv?.exists ? ` Current file: ${(cv.size / 1024).toFixed(0)}KB.` : " No CV uploaded yet."}
+          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <input
+              id="cv-file"
+              type="file"
+              accept="application/pdf,.pdf"
+              className="text-sm"
+              disabled={cvStatus.kind === "busy"}
+              onChange={(e) => uploadCv(e.target.files?.[0])}
+            />
+            <a className={ghost} href="/cv.pdf" target="_blank" rel="noopener noreferrer">
+              View current CV
+            </a>
+          </div>
+          {cvStatus.text ? (
+            <p
+              role="status"
+              aria-live="polite"
+              className={`mt-3 text-sm font-medium ${
+                cvStatus.kind === "error" ? "text-red-700" : "text-emerald-700"
+              }`}
+            >
+              {cvStatus.text}
+            </p>
+          ) : null}
         </section>
 
         {/* ---------------- section copy ---------------- */}

@@ -2,6 +2,7 @@ import { EmailMessage } from "cloudflare:email";
 import { createMimeMessage, Mailbox } from "mimetext";
 import { getContent, putContent } from "./content-api.js";
 import { verifyAccess } from "./access.js";
+import { getCvInfo, putCv } from "./cv-api.js";
 
 // Email Routing only delivers to a verified destination address, so the
 // recipient is fixed here rather than taken from the request.
@@ -162,6 +163,27 @@ export default {
       } catch (error) {
         console.error("content api crashed:", error?.stack ?? error);
         return json({ ok: false, error: "Unexpected error saving content." }, 500);
+      }
+    }
+
+    // CV upload -- same Access gate, same commit-and-rebuild flow.
+    if (pathname === "/api/cv") {
+      if (!["GET", "PUT"].includes(request.method)) {
+        return json({ ok: false, error: "Method not allowed." }, 405);
+      }
+
+      const auth = await verifyAccess(request, env);
+      if (!auth.ok) {
+        return json({ ok: false, error: auth.error }, auth.status);
+      }
+
+      try {
+        return request.method === "GET"
+          ? await getCvInfo(env)
+          : await putCv(request, env, auth.email);
+      } catch (error) {
+        console.error("cv api crashed:", error?.stack ?? error);
+        return json({ ok: false, error: "Unexpected error uploading the CV." }, 500);
       }
     }
 
