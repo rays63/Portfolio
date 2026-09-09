@@ -34,6 +34,19 @@
       "simple": { "limit": 3, "period": 60 }
     }
   ],
+  "vars": {
+    // Which repo and branch the admin writes to. Committing here triggers the
+    // deploy workflow, so this must be the branch that CI deploys from.
+    "GITHUB_REPO": "rays63/Portfolio",
+    "CONTENT_BRANCH": "main",
+    // Set these after creating the Access application, or the admin API stays
+    // locked (it fails closed by design):
+    //   npx wrangler secret put ACCESS_TEAM_DOMAIN   (e.g. yourteam.cloudflareaccess.com)
+    //   npx wrangler secret put ACCESS_AUD           (Application Audience tag)
+    //   npx wrangler secret put ADMIN_EMAILS         (optional allow-list)
+    //   npx wrangler secret put GITHUB_TOKEN         (fine-grained, Contents: write)
+    "ADMIN_EMAILS": ""
+  },
   "observability": {
     "enabled": true
   }

@@ -1,5 +1,7 @@
 import { EmailMessage } from "cloudflare:email";
 import { createMimeMessage, Mailbox } from "mimetext";
+import { getContent, putContent } from "./content-api.js";
+import { verifyAccess } from "./access.js";
 
 // Email Routing only delivers to a verified destination address, so the
 // recipient is fixed here rather than taken from the request.
@@ -139,6 +141,27 @@ export default {
       } catch (error) {
         console.error("contact form crashed:", error?.stack ?? error);
         return json({ ok: false, error: "Unexpected error. Please email me directly." }, 500);
+      }
+    }
+
+    // Admin content API -- gated by Cloudflare Access, verified here too.
+    if (pathname === "/api/content") {
+      if (!["GET", "PUT"].includes(request.method)) {
+        return json({ ok: false, error: "Method not allowed." }, 405);
+      }
+
+      const auth = await verifyAccess(request, env);
+      if (!auth.ok) {
+        return json({ ok: false, error: auth.error }, auth.status);
+      }
+
+      try {
+        return request.method === "GET"
+          ? await getContent(env)
+          : await putContent(request, env, auth.email);
+      } catch (error) {
+        console.error("content api crashed:", error?.stack ?? error);
+        return json({ ok: false, error: "Unexpected error saving content." }, 500);
       }
     }
 

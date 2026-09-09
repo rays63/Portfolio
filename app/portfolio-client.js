@@ -32,79 +32,6 @@ const outlineButton = `${pillButton} border-emerald-700/45 bg-white/90 text-emer
 const cardSurface = "rounded-2xl border border-slate-300 bg-white shadow-[0_14px_35px_rgba(16,21,37,0.08)]";
 const heroSectionClass = "reveal scroll-mt-24 flex min-h-[calc(100svh-84px)] flex-col items-center justify-center py-10 text-center";
 
-const skillItems = [
-  { name: "Playwright", group: "automation", icon: "automation" },
-  { name: "Cypress", group: "automation", icon: "automation" },
-  { name: "Appium 2", group: "automation", icon: "mobile" },
-  { name: "WebdriverIO", group: "automation", icon: "automation" },
-  { name: "REST API Testing", group: "api", icon: "api" },
-  { name: "Postman", group: "api", icon: "api" },
-  { name: "JMeter", group: "api", icon: "performance" },
-  { name: "JavaScript", group: "scripting", icon: "code" },
-  { name: "TypeScript", group: "scripting", icon: "code" },
-  { name: "Python", group: "scripting", icon: "code" },
-  { name: "SQL", group: "data", icon: "database" },
-  { name: "PostgreSQL", group: "data", icon: "database" },
-  { name: "Oracle", group: "data", icon: "database" },
-  { name: "GitHub Actions", group: "tools", icon: "devops" },
-  { name: "Jenkins", group: "tools", icon: "devops" },
-  { name: "Jira", group: "tools", icon: "collaboration" },
-  { name: "TestRail", group: "tools", icon: "collaboration" },
-  { name: "Manual Testing", group: "manual", icon: "manual" },
-  { name: "Regression Testing", group: "manual", icon: "manual" },
-  { name: "Mobile Testing", group: "manual", icon: "mobile" }
-];
-
-const skillFilters = [
-  { key: "all", label: "All" },
-  { key: "automation", label: "Automation" },
-  { key: "api", label: "API/Perf" },
-  { key: "manual", label: "Manual QA" },
-  { key: "data", label: "Data" },
-  { key: "tools", label: "Tools" }
-];
-
-const experienceHighlights = [
-  { metric: "80%", label: "Faster bug debugging and detection through targeted automation" },
-  { metric: "Web + Mobile", label: "End-to-end quality ownership across both platforms" },
-  { metric: "Cross-Functional", label: "Strong collaboration with engineering and product teams" }
-];
-
-const experienceResponsibilities = [
-  "Designed and executed manual and automated test scenarios for functional, regression, and performance coverage.",
-  "Built reusable Cypress automation components to accelerate test execution and maintenance.",
-  "Implemented Appium (JavaScript) mobile E2E suites to improve release confidence.",
-  "Validated APIs with Postman and assessed load behavior with JMeter.",
-  "Queried PostgreSQL and Oracle databases to verify business rules and data integrity.",
-  "Documented test strategy, test data, and execution evidence for clear stakeholder visibility.",
-  "Coordinated defect triage and resolution with developers and product teams in Jira.",
-  "Mentored QA trainees and contributed to continuous process improvements across sprint cycles."
-];
-
-const competencyItems = [
-  { title: "Manual & Automation Test Planning", icon: "planning" },
-  { title: "Bug Tracking & Test Reporting", icon: "bugs" },
-  { title: "Quality Assurance Best Practices", icon: "quality" },
-  { title: "Agile/Scrum Collaboration", icon: "agile" },
-  { title: "Process Optimization", icon: "optimization" },
-  { title: "Data Validation & Test Data Preparation", icon: "data" }
-];
-
-const educationItems = [
-  {
-    school: "IIMS College",
-    period: "2020 - 2024",
-    program: "Bachelor's Degree in Computer Science (Hons)",
-    location: "Kathmandu, Nepal"
-  },
-  {
-    school: "Arniko Int'l SS & College",
-    period: "2018 - 2020",
-    program: "Higher Secondary Level",
-    location: "Lalitpur, Nepal"
-  }
-];
-
 function SkillIcon({ type }) {
   const iconClass = "text-2xl text-emerald-700";
   if (type === "api") {
@@ -137,6 +64,14 @@ function SkillIcon({ type }) {
   return <MdMiscellaneousServices className={iconClass} aria-hidden="true" />;
 }
 
+function PillarIcon({ type }) {
+  const iconClass = "text-xl text-emerald-700";
+  if (type === "insights") return <MdInsights className={iconClass} aria-hidden="true" />;
+  if (type === "quality") return <MdFactCheck className={iconClass} aria-hidden="true" />;
+  if (type === "optimization") return <MdRocketLaunch className={iconClass} aria-hidden="true" />;
+  return <MdTaskAlt className={iconClass} aria-hidden="true" />;
+}
+
 function CompetencyIcon({ type }) {
   const iconClass = "text-3xl text-emerald-700";
   if (type === "planning") return <MdChecklist className={iconClass} aria-hidden="true" />;
@@ -148,7 +83,20 @@ function CompetencyIcon({ type }) {
   return <MdTaskAlt className={iconClass} aria-hidden="true" />;
 }
 
-export default function PortfolioClient({ projects = [], projectsStatus = "" }) {
+export default function PortfolioClient({ content, projects = [], projectsStatus = "" }) {
+  const {
+    profile,
+    highlights: experienceHighlights,
+    competencies: competencyItems,
+    pillars,
+    skillFilters,
+    skills: skillItems,
+    experience,
+    education: educationItems,
+    sections
+  } = content;
+  const job = experience[0];
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [navSolid, setNavSolid] = useState(false);
   const [showNav, setShowNav] = useState(false);
@@ -476,7 +424,8 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
         }`}
       >
         <a href="#home" className="text-xl font-bold text-slate-900">
-          Raymond <span className="text-emerald-700">Maharjan</span>
+          {profile.name.split(" ")[0]}{" "}
+          <span className="text-emerald-700">{profile.name.split(" ").slice(1).join(" ")}</span>
         </a>
 
         <button
@@ -513,19 +462,16 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
 
       <main id="home" className="mx-auto w-[min(1100px,94vw)] pb-16 pt-8">
         <section className={heroSectionClass}>
-          <p className="mb-2 text-sm font-bold text-emerald-700">Software Quality Assurance Engineer</p>
-          <h1 className="mx-auto text-4xl font-bold leading-tight md:text-6xl">Raymond Maharjan</h1>
+          <p className="mb-2 text-sm font-bold text-emerald-700">{profile.role}</p>
+          <h1 className="mx-auto text-4xl font-bold leading-tight md:text-6xl">{profile.name}</h1>
           
-          <p className="mx-auto mt-4 max-w-2xl text-slate-600">
-            I provide both automation and manual testing for web and mobile applications to ensure stable, high-quality
-            releases.
-          </p>
+          <p className="mx-auto mt-4 max-w-2xl text-slate-600">{profile.tagline}</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <a href="#contact" className={primaryButton}>
               Hire Me
             </a>
             <a
-              href="https://github.com/rays63"
+              href={profile.github}
               className={outlineButton}
               target="_blank"
               rel="noopener noreferrer"
@@ -535,7 +481,7 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
               <FaGithub className="text-lg" aria-hidden="true" />
             </a>
             <a
-              href="https://www.linkedin.com/in/raymz/"
+              href={profile.linkedin}
               className={outlineButton}
               target="_blank"
               rel="noopener noreferrer"
@@ -554,12 +500,7 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
           <h2 className="mb-4 text-3xl font-semibold">About Me</h2>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-5 md:grid-rows-6">
             <div className={`${cardSurface} bg-gradient-to-br from-white to-emerald-50/45 p-6 md:col-span-3 md:row-span-3`}>
-              <p>
-                I am a Software Quality Assurance Engineer who ensures products are reliable, scalable, and release-ready.
-                I work across manual and automated testing for web and mobile platforms, design practical test coverage,
-                validate APIs and data flows, and collaborate closely with cross-functional teams to resolve issues early
-                and deliver confident releases.
-              </p>
+              <p>{profile.about}</p>
             </div>
 
             <div className="grid grid-cols-1 gap-3 md:col-span-3 md:row-span-3 md:grid-cols-3">
@@ -609,29 +550,13 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
           </div>
 
           <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-            {[
-              {
-                label: "Planning",
-                desc: "Test strategy, scope definition, and risk-based coverage planning.",
-                icon: <MdInsights className="text-xl text-emerald-700" aria-hidden="true" />
-              },
-              {
-                label: "Execution",
-                desc: "Reliable manual and automation execution across web, mobile, and API.",
-                icon: <MdFactCheck className="text-xl text-emerald-700" aria-hidden="true" />
-              },
-              {
-                label: "Delivery",
-                desc: "Defect visibility, reporting, and quality sign-off for stable releases.",
-                icon: <MdRocketLaunch className="text-xl text-emerald-700" aria-hidden="true" />
-              }
-            ].map((pillar) => (
+            {pillars.map((pillar) => (
               <article
                 key={pillar.label}
                 className={`${cardSurface} group flex items-start gap-3 px-4 py-4 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_45px_rgba(16,21,37,0.15)]`}
               >
                 <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-2.5 transition-colors duration-300 group-hover:bg-emerald-100">
-                  {pillar.icon}
+                  <PillarIcon type={pillar.icon} />
                 </div>
                 <div>
                   <p className="font-semibold text-slate-900">{pillar.label}</p>
@@ -694,7 +619,7 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
         <section id="projects" className="reveal py-11">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-3xl font-semibold">Projects</h2>
-            <p className="text-sm text-slate-600">Pulled from GitHub repositories</p>
+            <p className="text-sm text-slate-600">{sections.projectsSubtitle}</p>
           </div>
 
           {projectsStatus ? <div className="mb-3 text-slate-600">{projectsStatus}</div> : null}
@@ -727,9 +652,11 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
           <h2 className="mb-4 text-3xl font-semibold">Work Experience</h2>
           <article className={`${cardSurface} overflow-hidden`}>
             <div className="border-b border-emerald-100 bg-gradient-to-r from-emerald-50 to-white px-6 py-5">
-              <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">Bajra Technologies · Kathmandu, Nepal</p>
-              <h3 className="mt-2 text-xl font-semibold">Software Quality Assurance Engineer L1</h3>
-              <p className="text-sm text-slate-600">June 2024 - Present</p>
+              <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
+                {job.company} · {job.location}
+              </p>
+              <h3 className="mt-2 text-xl font-semibold">{job.role}</h3>
+              <p className="text-sm text-slate-600">{job.period}</p>
             </div>
             <div className="p-6">
               <div className="mb-5 grid grid-cols-1 gap-3 md:grid-cols-3">
@@ -741,7 +668,7 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
                 ))}
               </div>
               <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                {experienceResponsibilities.map((item) => (
+                {job.responsibilities.map((item) => (
                   <p key={item} className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
                     {item}
                   </p>
@@ -770,7 +697,7 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
         <section id="download" className="reveal py-11">
           <h2 className="mb-4 text-3xl font-semibold">Download CV</h2>
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-300 bg-white p-5 shadow-[0_14px_35px_rgba(16,21,37,0.08)]">
-            <p>Get my complete CV in PDF format with detailed project and testing experience.</p>
+            <p>{sections.cvIntro}</p>
             <a href="/cv.pdf" className={primaryButton} download>
               Download PDF
             </a>
@@ -781,23 +708,22 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
           <h2 className="mb-4 text-3xl font-semibold">Get in Touch</h2>
           <div className="grid gap-5 rounded-2xl border border-slate-300 bg-white p-5 shadow-[0_14px_35px_rgba(16,21,37,0.08)] md:grid-cols-[1fr_1.2fr]">
             <div className="grid content-start gap-3">
-              <p>
-                If you&apos;d like to discuss QA roles or collaboration, send me a message and
-                I&apos;ll get back to you.
-              </p>
+              <p>{sections.contactIntro}</p>
               <p className="text-sm text-slate-600">
                 Prefer email?{" "}
                 <a
                   className="font-semibold text-emerald-700 hover:underline"
-                  href="mailto:raymondmhz63@gmail.com?subject=QA%20Engineer%20Opportunity"
+                  href={`mailto:${profile.email}?subject=QA%20Engineer%20Opportunity`}
                 >
-                  raymondmhz63@gmail.com
+                  {profile.email}
                 </a>
               </p>
-              <p className="text-sm text-slate-600">Kathmandu, Nepal &middot; open to remote roles</p>
+              <p className="text-sm text-slate-600">
+                {profile.location} &middot; {profile.availability}
+              </p>
               <a
                 className="text-sm font-semibold text-emerald-700 hover:underline"
-                href="https://www.linkedin.com/in/raymz/"
+                href={profile.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -879,7 +805,7 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
       </main>
 
       <footer className="border-t border-slate-300 py-5 text-center text-slate-600">
-        <p>&copy; {new Date().getFullYear()} Raymond Maharjan</p>
+        <p>&copy; {new Date().getFullYear()} {profile.name}</p>
       </footer>
     </>
   );

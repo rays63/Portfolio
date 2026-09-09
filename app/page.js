@@ -1,5 +1,6 @@
 import PortfolioClient from "./portfolio-client";
 import projectsFallback from "./projects-fallback.json";
+import content from "./content.json";
 
 const GITHUB_USERNAME = "rays63";
 const PROJECT_LIMIT = 6;
@@ -87,5 +88,5 @@ const loadGitHubProjects = async () => {
 export default async function Page() {
   const { projects, projectsStatus } = await loadGitHubProjects();
 
-  return <PortfolioClient projects={projects} projectsStatus={projectsStatus} />;
+  return <PortfolioClient content={content} projects={projects} projectsStatus={projectsStatus} />;
 }
