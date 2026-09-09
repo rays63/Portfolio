@@ -11,6 +11,7 @@
     "preview": "next build && wrangler dev"
   },
   "dependencies": {
+    "mimetext": "^3.0.28",
     "next": "^16.1.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
