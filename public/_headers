@@ -1,0 +1,19 @@
+# Content-hashed assets can never go stale — cache them for a year.
+/_next/static/*
+  cache-control: public, max-age=31536000, immutable
+
+# Icons and the social card change rarely; a day is plenty.
+/icon.svg
+  cache-control: public, max-age=86400
+/icon.png
+  cache-control: public, max-age=86400
+/apple-icon.png
+  cache-control: public, max-age=86400
+/opengraph-image.png
+  cache-control: public, max-age=86400
+
+/*
+  x-content-type-options: nosniff
+  referrer-policy: strict-origin-when-cross-origin
+  x-frame-options: DENY
+  permissions-policy: geolocation=(), microphone=(), camera=()

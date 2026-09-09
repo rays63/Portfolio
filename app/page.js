@@ -1,4 +1,5 @@
 import PortfolioClient from "./portfolio-client";
+import projectsFallback from "./projects-fallback.json";
 
 const GITHUB_USERNAME = "rays63";
 const PROJECT_LIMIT = 6;
@@ -37,9 +38,14 @@ const fetchReadmeSummary = async (owner, repoName, fallback) => {
 
 // Runs at build time so the project cards ship inside the static HTML,
 // which is what search engines index reliably.
+const useFallback = (reason) => {
+  console.warn(`[build] GitHub fetch failed (${reason}); using app/projects-fallback.json`);
+  return { projects: projectsFallback, projectsStatus: "" };
+};
+
 const loadGitHubProjects = async () => {
   if (!GITHUB_USERNAME || GITHUB_USERNAME === "your-github-username") {
-    return { projects: [], projectsStatus: "Set your GitHub username in app/page.js to load projects here." };
+    return useFallback("no username configured");
   }
 
   try {
@@ -49,14 +55,14 @@ const loadGitHubProjects = async () => {
     );
 
     if (!reposResponse.ok) {
-      return { projects: [], projectsStatus: "Unable to load GitHub projects right now." };
+      return useFallback(`HTTP ${reposResponse.status}`);
     }
 
     const repos = await reposResponse.json();
     const selectedRepos = repos.filter((repo) => !repo.fork).slice(0, PROJECT_LIMIT);
 
     if (!selectedRepos.length) {
-      return { projects: [], projectsStatus: "No public repositories found for this user." };
+      return useFallback("no public repositories returned");
     }
 
     const projects = await Promise.all(
@@ -73,8 +79,8 @@ const loadGitHubProjects = async () => {
     );
 
     return { projects, projectsStatus: "" };
-  } catch {
-    return { projects: [], projectsStatus: "Failed to load projects. Please try again later." };
+  } catch (error) {
+    return useFallback(error?.message ?? "network error");
   }
 };
 

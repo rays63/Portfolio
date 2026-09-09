@@ -22,6 +22,9 @@ import {
 } from "react-icons/md";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 
+const contactField =
+  "w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-800 shadow-sm outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-200";
+
 const pillButton =
   "inline-flex min-h-10 items-center justify-center rounded-full border px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5";
 const primaryButton = `${pillButton} border-emerald-700 bg-emerald-700 text-white shadow-[0_10px_26px_rgba(11,110,79,0.3)] hover:bg-emerald-800`;
@@ -150,6 +153,8 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
   const [navSolid, setNavSolid] = useState(false);
   const [showNav, setShowNav] = useState(false);
   const [activeFilter, setActiveFilter] = useState("automation");
+  const [contactState, setContactState] = useState("idle");
+  const [contactNotice, setContactNotice] = useState("");
   const cursorLensRef = useRef(null);
 
   const filteredSkills = useMemo(() => {
@@ -417,6 +422,43 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
     };
   }, []);
 
+  const handleContactSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const payload = Object.fromEntries(new FormData(form).entries());
+
+    if (!payload.name?.trim() || !payload.email?.trim() || !payload.message?.trim()) {
+      setContactState("error");
+      setContactNotice("Please fill in every field.");
+      return;
+    }
+
+    setContactState("sending");
+    setContactNotice("");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || !result.ok) {
+        setContactState("error");
+        setContactNotice(result.error ?? "Something went wrong. Please email me directly.");
+        return;
+      }
+
+      form.reset();
+      setContactState("sent");
+      setContactNotice("Thanks -- your message is on its way.");
+    } catch {
+      setContactState("error");
+      setContactNotice("Network error. Please email me directly.");
+    }
+  };
+
   return (
     <>
       <canvas id="particles-canvas" aria-hidden="true" />
@@ -440,12 +482,15 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
         <button
           className="rounded border border-slate-300 bg-white px-2 py-1 text-xl text-slate-700 md:hidden"
           aria-label="Toggle navigation"
+          aria-expanded={menuOpen}
+          aria-controls="primary-navigation"
           onClick={() => setMenuOpen((v) => !v)}
         >
           &#9776;
         </button>
 
         <nav
+          id="primary-navigation"
           className={`absolute right-[6vw] top-full w-[min(260px,80vw)] flex-col gap-3 rounded-xl border border-slate-300 bg-white p-4 shadow-lg md:static md:flex md:w-auto md:flex-row md:border-0 md:bg-transparent md:p-0 md:shadow-none ${
             menuOpen ? "flex" : "hidden"
           }`}
@@ -490,7 +535,7 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
               <FaGithub className="text-lg" aria-hidden="true" />
             </a>
             <a
-              href="https://www.linkedin.com"
+              href="https://www.linkedin.com/in/raymz/"
               className={outlineButton}
               target="_blank"
               rel="noopener noreferrer"
@@ -531,8 +576,11 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
 
             <div className="flex items-center justify-center p-4 md:col-span-2 md:row-span-6 md:col-start-4 md:row-start-1">
               <img
-                src="https://github.com/rays63.png"
+                src="/profile.jpg"
                 alt="Raymond Maharjan profile"
+                width={460}
+                height={460}
+                fetchPriority="high"
                 className="h-44 w-44 rounded-2xl border border-emerald-200 object-cover shadow-sm md:h-[92%] md:w-full md:max-w-[260px]"
               />
             </div>
@@ -599,6 +647,10 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
               {skillFilters.map((filter) => (
                 <button
                   key={filter.key}
+                  role="tab"
+                  id={`skill-filter-${filter.key}`}
+                  aria-selected={activeFilter === filter.key}
+                  aria-controls="skill-list"
                   className={`${pillButton} ${
                     activeFilter === filter.key
                       ? "border-transparent bg-emerald-700 text-white shadow-[0_10px_22px_rgba(11,110,79,0.28)]"
@@ -612,7 +664,12 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            id="skill-list"
+            role="tabpanel"
+            aria-labelledby={`skill-filter-${activeFilter}`}
+            className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          >
             {filteredSkills.map((skill) => (
               <article
                 key={skill.name}
@@ -722,11 +779,101 @@ export default function PortfolioClient({ projects = [], projectsStatus = "" }) 
 
         <section id="contact" className="reveal py-11">
           <h2 className="mb-4 text-3xl font-semibold">Get in Touch</h2>
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-300 bg-white p-5 shadow-[0_14px_35px_rgba(16,21,37,0.08)]">
-            <p>If you&apos;d like to discuss QA roles or collaboration, send me an email.</p>
-            <a className={outlineButton} href="mailto:raymondmhz63@gmail.com?subject=QA%20Engineer%20Opportunity">
-              contact me
-            </a>
+          <div className="grid gap-5 rounded-2xl border border-slate-300 bg-white p-5 shadow-[0_14px_35px_rgba(16,21,37,0.08)] md:grid-cols-[1fr_1.2fr]">
+            <div className="grid content-start gap-3">
+              <p>
+                If you&apos;d like to discuss QA roles or collaboration, send me a message and
+                I&apos;ll get back to you.
+              </p>
+              <p className="text-sm text-slate-600">
+                Prefer email?{" "}
+                <a
+                  className="font-semibold text-emerald-700 hover:underline"
+                  href="mailto:raymondmhz63@gmail.com?subject=QA%20Engineer%20Opportunity"
+                >
+                  raymondmhz63@gmail.com
+                </a>
+              </p>
+              <p className="text-sm text-slate-600">Kathmandu, Nepal &middot; open to remote roles</p>
+              <a
+                className="text-sm font-semibold text-emerald-700 hover:underline"
+                href="https://www.linkedin.com/in/raymz/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Connect on LinkedIn
+              </a>
+            </div>
+
+            <form className="grid gap-3" onSubmit={handleContactSubmit} noValidate>
+              <div className="grid gap-1">
+                <label className="text-sm font-semibold text-slate-700" htmlFor="contact-name">
+                  Name
+                </label>
+                <input
+                  id="contact-name"
+                  name="name"
+                  type="text"
+                  required
+                  maxLength={100}
+                  autoComplete="name"
+                  className={contactField}
+                />
+              </div>
+
+              <div className="grid gap-1">
+                <label className="text-sm font-semibold text-slate-700" htmlFor="contact-email">
+                  Email
+                </label>
+                <input
+                  id="contact-email"
+                  name="email"
+                  type="email"
+                  required
+                  maxLength={200}
+                  autoComplete="email"
+                  className={contactField}
+                />
+              </div>
+
+              <div className="grid gap-1">
+                <label className="text-sm font-semibold text-slate-700" htmlFor="contact-message">
+                  Message
+                </label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  required
+                  rows={5}
+                  minLength={10}
+                  maxLength={5000}
+                  className={contactField}
+                />
+              </div>
+
+              {/* Honeypot -- hidden from people, catches naive bots. */}
+              <div className="hidden" aria-hidden="true">
+                <label htmlFor="contact-company">Company</label>
+                <input id="contact-company" name="company" type="text" tabIndex={-1} autoComplete="off" />
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <button type="submit" className={primaryButton} disabled={contactState === "sending"}>
+                  {contactState === "sending" ? "Sending..." : "Send Message"}
+                </button>
+                {contactNotice ? (
+                  <p
+                    role="status"
+                    aria-live="polite"
+                    className={`text-sm font-semibold ${
+                      contactState === "error" ? "text-red-700" : "text-emerald-700"
+                    }`}
+                  >
+                    {contactNotice}
+                  </p>
+                ) : null}
+              </div>
+            </form>
           </div>
         </section>
       </main>
